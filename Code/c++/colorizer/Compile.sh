@@ -1,0 +1,1 @@
+g++ -std=c++11 -o colorizer src/main.cpp -lGeographic -lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_ml -lopencv_video -lopencv_features2d -lopencv_calib3d -lopencv_objdetect -lopencv_imgcodecs
