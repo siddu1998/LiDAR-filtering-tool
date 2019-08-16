@@ -105,6 +105,7 @@ def make_buckets(lidar_path,inventory_path):
         temp_list=[None,None,None,None,None,None,None,None,None]
         index=row[0]
         value=row[1]
+
         if value['frame_id_2018']=='None':
             print('[INFO] {} no gps location located by URA for this sign id'.format(value['sign_id']))
         
@@ -132,7 +133,7 @@ def make_buckets(lidar_path,inventory_path):
 
 
 
-            
+
 
     print("[INFO] Saving to file")
     df_lidar = pd.DataFrame(check_list)
