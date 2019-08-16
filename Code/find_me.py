@@ -73,7 +73,7 @@ def make_buckets(lidar_path,inventory_path):
     print("[INFO] Reading LiDAR data")
     df_retro = pd.read_csv(lidar_path)
     print("[INFO] getting points with retro greater then 0.45")
-    df_retro = df_retro.loc[(df_retro['Retro']>=0.45)]
+    df_retro = df_retro.loc[(df_retro['Retro']>=0.3)]
 
     print("[INFO] Converting filtered points coordinates' from lla to NED..")
     df_retro = DataFrameLLA2Cartesian(df_retro)
@@ -94,6 +94,15 @@ def make_buckets(lidar_path,inventory_path):
 
     check_list=[]
     for row in df_inventory.iterrows():
+        #sign_id, 
+        #gps_of_sign_lat
+        #gps_of_sign_long
+        #nearest_point_deteced index
+        #distance between the point detected and the sign gps
+        #gps coordinates_lat
+        #gps_coordinates_lon
+
+        temp_list=[None,None,None,None,None,None,None,None,None]
         index=row[0]
         value=row[1]
         if value['frame_id_2018']=='None':
@@ -108,11 +117,28 @@ def make_buckets(lidar_path,inventory_path):
 
             query_point = np.array([x_sign,y_sign,z_sign]).reshape(1,-1)
             query_return = kdtree.query(query_point)
-            check_list.append(query_return[1])
-    print(check_list)
+            temp_list[0]=value['sign_id']
+            temp_list[1]=value['lat']
+            temp_list[2]=value['long']
+            temp_list[3]=int(query_return[1])
+            temp_list[4]=float(query_return[0])
+            temp_list[5]=df_retro.iloc[int(query_return[1])]['Id'] 
+            temp_list[6]=df_retro.iloc[int(query_return[1])]['X']
+            temp_list[7]=df_retro.iloc[int(query_return[1])]['Y']
+            temp_list[8]=df_retro.iloc[int(query_return[1])]['Retro']
+
+            check_list.append(temp_list)
 
 
 
 
             
-make_buckets('../Data/V_20180816_I285_EB_run1(0).csv','../Data/SignInventory_i285_CW_output_V1.csv') 
+
+    print("[INFO] Saving to file")
+    df_lidar = pd.DataFrame(check_list)
+    df_lidar.to_csv('visualize.csv',index=False,header=False)
+
+
+
+            
+make_buckets('/home/pramodith/Desktop/lidar_sign_extractor_v1/Data/V_20180816_I285_EB_run1(0).csv','/home/pramodith/Desktop/lidar_sign_extractor_v1/Data/SignInventory_i285_CW_output_V1.csv') 
