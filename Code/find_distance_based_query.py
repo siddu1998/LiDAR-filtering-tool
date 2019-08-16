@@ -116,7 +116,7 @@ def make_buckets(lidar_path,inventory_path):
             #print('[INFO] reshaping the converted cordinates for the query')
 
             query_point = np.array([x_sign,y_sign,z_sign]).reshape(1,-1)
-            query_return = kdtree.query_radius(query_point,r=3)
+            query_return = kdtree.query_ball_point(query_point,r=2)
             # temp_list[0]=value['sign_id']
             # temp_list[1]=value['lat']
             # temp_list[2]=value['long']
@@ -126,13 +126,15 @@ def make_buckets(lidar_path,inventory_path):
             # temp_list[6]=df_retro.iloc[int(query_return[1])]['X']
             # temp_list[7]=df_retro.iloc[int(query_return[1])]['Y']
             # temp_list[8]=df_retro.iloc[int(query_return[1])]['Retro']
+            
 
             check_list.append([value['sign_id'],query_return])
     print(check_list)
 
 
 
-
+[[1953, array([list([1667211, 1667237, 1667271, 1667291, 1667615, 1667635, 1667636, 1667650, 1667651, 1667652, 1667668, 1667669, 1667690, 1667691, 1667736, 1667760, 1667761, 1667984, 1668005, 1668028, 1668055, 1668078, 1668102, 1668168, 1668185, 1668205, 1668231, 1668249, 1668262])],
+      dtype=object)]
             
 
     print("[INFO] Saving to file")
