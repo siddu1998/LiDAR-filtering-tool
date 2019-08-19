@@ -6,9 +6,14 @@ import pandas as pd
 
 
 
-df_visual_data = pd.read_csv('visualize_radius_group_indices_visble_test.csv')
-df_visual_data = df_visual_data.groupby('sign_id')
+df_visual_data = pd.read_csv('visualize_radius_group_indices_visble_45.csv')
 
+
+
+
+
+df_visual_data = df_visual_data.groupby('sign_id')
+print(len(df_visual_data))
 sign_to_plot   = int(input("Please enter the sign you want to plot"))
 
 df_visual_data = df_visual_data.get_group(sign_to_plot)
