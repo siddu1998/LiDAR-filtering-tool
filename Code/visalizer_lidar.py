@@ -6,7 +6,7 @@ import pandas as pd
 
 
 
-df_visual_data = pd.read_csv('visualize_radius_group_indices_visble_45.csv')
+df_visual_data = pd.read_csv('visualize_radius_group_indices_frame.csv')
 
 
 
@@ -27,12 +27,18 @@ x =df_visual_data['lidar_lat']
 y =df_visual_data['lidar_long']
 z =df_visual_data['lidar_alt']
 
-x_sign=df_visual_data['lat']
-y_sign=df_visual_data['long']
-z_sign=df_visual_data['alt']
+x_sign=df_visual_data['lat_sign']
+y_sign=df_visual_data['long_sign']
+z_sign=df_visual_data['alt_sign']
+
+
+x_car=df_visual_data['car_lat']
+y_car=df_visual_data['car_long']
+z_car=df_visual_data['car_alt']
 
 ax.scatter(x, y, z, c='r', marker='o')
 ax.scatter(x_sign, y_sign, z_sign, c='g', marker='^')
+ax.scatter(x_car,y_car,z_car,c='y',marker='*')
 
 
 ax.set_xlabel('X Label')
