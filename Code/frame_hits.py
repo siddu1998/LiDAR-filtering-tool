@@ -137,7 +137,7 @@ def make_buckets(lidar_path,inventory_path):
             if len(query_return[0])>0:
                 for i in query_return[0]:
                     #print(len(query_return[0]))
-                    temp_list=[None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None]
+                    temp_list=[None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None]
                     
                     temp_list[0]=value['sign_id']
                     temp_list[1]=value['lat']
@@ -160,13 +160,18 @@ def make_buckets(lidar_path,inventory_path):
 
                     temp_list[14]=value['overhead_type']
                     #car-sign if below car +ve if above car -ve
-                    temp_list[15]=int(temp_df['alt'])-int(value['alt'])
+                    temp_list[15]=int(temp_df['alt'])-int(temp_list[7])
+
+                    temp_list[16]=df_retro.iloc[i]['x_cart']
+                    temp_list[17]=df_retro.iloc[i]['y_cart']
+                    temp_list[18]=df_retro.iloc[i]['z_cart']
+
 
                     check_list.append(temp_list)
 
 
     print("[INFO] Saving to file")
-    df_lidar = pd.DataFrame(check_list,columns=['sign_id','lat_sign','long_sign','alt_sign','index','lidar_lat','lidar_long','lidar_alt','retro','mutcd_code','count','car_lat','car_long','car_alt','overhead','alt_diff'])
+    df_lidar = pd.DataFrame(check_list,columns=['sign_id','lat_sign','long_sign','alt_sign','index','lidar_lat','lidar_long','lidar_alt','retro','mutcd_code','count','car_lat','car_long','car_alt','overhead','alt_diff','x_cart','y_cart','z_cart'])
     df_lidar.to_csv('visualize_radius_group_indices_frame.csv',index=False,header=True)
 
 
