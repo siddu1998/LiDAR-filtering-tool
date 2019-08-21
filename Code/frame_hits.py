@@ -37,6 +37,8 @@ import pandas as pd
 import navpy
 import math
 import numpy as np
+import os
+import matplotlib.pyplot as plt
 
 MIN_ELEVATION =2
 MAX_ELEVATION =10
@@ -69,6 +71,8 @@ def apply_topology(self,bucket_of_points):
 
 
 def make_buckets(lidar_path,inventory_path):
+    base_folder='/'
+    save_folder = os.path.join(base_folder,'retro_hist')
 
     print("[INFO] Reading LiDAR data")
     df_retro = pd.read_csv(lidar_path)
@@ -175,7 +179,7 @@ def make_buckets(lidar_path,inventory_path):
     print("[INFO] Saving to file")
     df_lidar = pd.DataFrame(check_list,columns=['sign_id','lat_sign','long_sign','alt_sign','index','lidar_lat','lidar_long','lidar_alt','retro','mutcd_code','count','car_lat','car_long','car_alt','overhead','alt_diff','x_cart','y_cart','z_cart','frame'])
     df_lidar.to_csv('visualize_radius_group_indices_frame.csv',index=False,header=True)
-
+    print("[INFO] Finished extracting points")
 
 
             
