@@ -37,6 +37,8 @@ import pandas as pd
 import navpy
 import math
 import numpy as np
+import os
+import matplotlib.pyplot as plt
 
 MIN_ELEVATION =2
 MAX_ELEVATION =10
@@ -46,16 +48,16 @@ LON_REF = -84.24924553
 ALT_REF = 200
 
 def DataFrameLLA2Cartesian(df):
-	lon = df["X"].values
-	lat = df["Y"].values
-	alt = df["Z"].values
-	cartesian = navpy.lla2ned(lat, lon, alt,
-						LAT_REF, LON_REF, ALT_REF,
-						latlon_unit='deg', alt_unit='m', model='wgs84')
-	df['x_cart'] = cartesian[:, 0]
-	df['y_cart'] = cartesian[:, 1]
-	df['z_cart'] = cartesian[:, 2]
-	return df
+    lon = df["X"].values
+    lat = df["Y"].values
+    alt = df["Z"].values
+    cartesian = navpy.lla2ned(lat, lon, alt,
+                        LAT_REF, LON_REF, ALT_REF,
+                        latlon_unit='deg', alt_unit='m', model='wgs84')
+    df['x_cart'] = cartesian[:, 0]
+    df['y_cart'] = cartesian[:, 1]
+    df['z_cart'] = cartesian[:, 2]
+    return df
 
 
 
@@ -69,11 +71,13 @@ def apply_topology(self,bucket_of_points):
 
 
 def make_buckets(lidar_path,inventory_path):
+    base_folder='/'
+    save_folder = os.path.join(base_folder,'retro_hist')
 
     print("[INFO] Reading LiDAR data")
     df_retro = pd.read_csv(lidar_path)
     print("[INFO] getting points with retro greater then 0.45")
-    df_retro = df_retro.loc[(df_retro['Retro']>=0.45)]
+    df_retro = df_retro.loc[(df_retro['Retro']>=0.40)]
 
     print("[INFO] Converting filtered points coordinates' from lla to NED..")
     df_retro = DataFrameLLA2Cartesian(df_retro)
@@ -127,8 +131,8 @@ def make_buckets(lidar_path,inventory_path):
 
 
             x_sign, y_sign, z_sign = navpy.lla2ned(temp_df['lat'],temp_df['long'],temp_df['alt'],
-									LAT_REF, LON_REF, ALT_REF,
-									latlon_unit='deg', alt_unit='m', model='wgs84')
+                                    LAT_REF, LON_REF, ALT_REF,
+                                    latlon_unit='deg', alt_unit='m', model='wgs84')
             #print('[INFO] reshaping the converted cordinates for the query')
 
             query_point = np.array([x_sign,y_sign,z_sign]).reshape(1,-1)
@@ -174,8 +178,8 @@ def make_buckets(lidar_path,inventory_path):
 
     print("[INFO] Saving to file")
     df_lidar = pd.DataFrame(check_list,columns=['sign_id','lat_sign','long_sign','alt_sign','index','lidar_lat','lidar_long','lidar_alt','retro','mutcd_code','count','car_lat','car_long','car_alt','overhead','alt_diff','x_cart','y_cart','z_cart','frame'])
-    df_lidar.to_csv('visualize_radius_group_indices_frame.csv',index=False,header=True)
-
+    df_lidar.to_csv('visualize_radius_group_indices_frame_missing.csv',index=False,header=True)
+    print("[INFO] Finished extracting points")
 
 
             

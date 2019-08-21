@@ -29,7 +29,7 @@ z=[]
 for row in df_visual_data.iterrows():
 	index=row[0]
 	value=row[1]
-	if int(value['alt_diff'])>-6:
+	if int(value['alt_diff'])>-5:
 		print(value)
 
 		x.append(value['lidar_lat'])
