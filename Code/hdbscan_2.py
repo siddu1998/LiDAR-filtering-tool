@@ -8,12 +8,13 @@ import hdbscan
 
 import matplotlib.pyplot as plt
 import seaborn as sns
-df_visual_data = pd.read_csv('2025.csv')
+df_visual_data = pd.read_csv('visualize_radius_group_indices_frame.csv')
 
 
 
 
-
+sign_id_list=df_visual_data['sign_id']
+sign_id_list=set(df_visual_data)
 df_visual_data = df_visual_data.groupby('sign_id')
 print(len(df_visual_data))
 sign_to_plot   = int(input("Please enter the sign you want to plot"))

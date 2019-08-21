@@ -20,7 +20,7 @@ ax = fig.add_subplot(111, projection='3d')
 
 
 colors = ['r','y','g','b','yellow','gray']
-markers=['*','^','+']
+markers=['.','*','^','+']
 
 
 clusters=set(df_visual_data['cluster_group'])
@@ -40,6 +40,20 @@ for i in set(clusters):
 # 	df_visual_data=df_visual_data.get_group(int(i))
 
 # 	ax.scatter(df_visual_data['lidar_lat'],df_visual_data['lidar_long'], df_visual_data['lidar_long'],s=3, c=colors[i], marker=markers[i])
+
+
+x_sign=df_visual_data['lat_sign']
+y_sign=df_visual_data['long_sign']
+z_sign=df_visual_data['alt_sign']
+
+
+x_car=df_visual_data['car_lat']
+y_car=df_visual_data['car_long']
+z_car=df_visual_data['car_alt']
+
+
+ax.scatter(x_sign, y_sign, z_sign, s=100, c='g', marker='^')
+ax.scatter(x_car,y_car,z_car,s=100,c='y',marker='*')
 
 
 
