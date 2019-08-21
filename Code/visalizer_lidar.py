@@ -23,9 +23,21 @@ df_visual_data = df_visual_data.get_group(sign_to_plot)
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 
-x =df_visual_data['lidar_lat']
-y =df_visual_data['lidar_long']
-z =df_visual_data['lidar_alt']
+x=[]
+y=[]
+z=[]
+for row in df_visual_data.iterrows():
+	index=row[0]
+	value=row[1]
+	if int(value['alt_diff'])>-6:
+		print(value)
+
+		x.append(value['lidar_lat'])
+		y.append(value['lidar_long'])
+		z.append(value['lidar_alt'])
+
+print(len(x))
+
 
 x_sign=df_visual_data['lat_sign']
 y_sign=df_visual_data['long_sign']
