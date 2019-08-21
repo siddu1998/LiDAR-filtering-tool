@@ -31,7 +31,6 @@ y_car=df['car_alt']
 
 
 
-
 from sklearn.preprocessing import StandardScaler  # For scaling dataset
 from sklearn.cluster import KMeans, AgglomerativeClustering, AffinityPropagation #For clustering
 from sklearn.mixture import GaussianMixture

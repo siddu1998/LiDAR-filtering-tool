@@ -50,7 +50,7 @@ z_car=df_visual_data['car_alt']
 
 
 
-ax.scatter(x, y, z, c='r', marker='o')
+ax.scatter(x, y, z,s=3, c='r', marker='o')
 ax.scatter(x_sign, y_sign, z_sign, c='g', marker='^')
 ax.scatter(x_car,y_car,z_car,c='y',marker='*')
 
