@@ -6,7 +6,7 @@ import pandas as pd
 
 
 
-df_visual_data = pd.read_csv('clustered_1992_41.csv')
+df_visual_data = pd.read_csv('clustered_2022_41.csv')
 df_visual_data = df_visual_data.groupby('sign_id')
 
 sign_to_plot   = int(input("Please enter the sign you want to plot"))
