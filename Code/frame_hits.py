@@ -77,7 +77,7 @@ def make_buckets(lidar_path,inventory_path):
     print("[INFO] Reading LiDAR data")
     df_retro = pd.read_csv(lidar_path)
     print("[INFO] getting points with retro greater then 0.45")
-    df_retro = df_retro.loc[(df_retro['Retro']>=0.40)]
+    df_retro = df_retro.loc[(df_retro['Retro']>=0.61)]
 
     print("[INFO] Converting filtered points coordinates' from lla to NED..")
     df_retro = DataFrameLLA2Cartesian(df_retro)
@@ -178,8 +178,8 @@ def make_buckets(lidar_path,inventory_path):
 
 
     print("[INFO] Saving to file")
-    df_lidar = pd.DataFrame(check_list,columns=['sign_id','lat_sign','long_sign','alt_sign','index','lidar_lat','lidar_long','lidar_alt','retro','mutcd_code','count','car_lat','car_long','car_alt','overhead','alt_diff','x_cart','y_cart','z_cart','frame'])
-    df_lidar.to_csv('visualize_radius_group_indices_frame_41.csv',index=False,header=True)
+    df_lidar = pd.DataFrame(check_list,columns=['sign_id','lat_sign','long_sign','alt_sign','index','lidar_lat','lidar_long','lidar_alt','retro','mutcd_code','count','car_lat','car_long','car_alt','overhead','alt_diff','x_cart','y_cart','z_cart','frame','physical_condition'])
+    df_lidar.to_csv('visualize_radius_group_indices_frame.csv',index=False,header=True)
     print("[INFO] Finished extracting points")
 
 
