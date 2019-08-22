@@ -6,7 +6,7 @@ import pandas as pd
 
 
 
-df_visual_data = pd.read_csv('clustered_1977.csv')
+df_visual_data = pd.read_csv('clustered_1992_41.csv')
 df_visual_data = df_visual_data.groupby('sign_id')
 
 sign_to_plot   = int(input("Please enter the sign you want to plot"))
@@ -19,7 +19,7 @@ ax = fig.add_subplot(111, projection='3d')
 
 
 
-colors = ['r','y','g','b','yellow','gray']
+colors = ['r','y','g','b','yellow','gray','m','black','cyan','burlywood']
 markers=['.','*','^','+']
 
 
@@ -32,7 +32,7 @@ for i in set(clusters):
 
 	temp_df=df_visual_data.groupby('cluster_group')
 	temp_df=temp_df.get_group(int(i))
-	ax.scatter(temp_df['lidar_lat'],temp_df['lidar_long'], temp_df['lidar_alt'],s=20, c='orange', marker='*')
+	ax.scatter(temp_df['lidar_lat'],temp_df['lidar_long'], temp_df['lidar_alt'],s=20, c=colors[i], marker='*')
 
 
 # for i in set(clusters):

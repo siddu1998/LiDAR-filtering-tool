@@ -35,7 +35,7 @@ plt.show()
 N=10
 
 rads = np.radians(points)
-clusterer = hdbscan.HDBSCAN(min_cluster_size=10,metric='haversine').fit(points)
+clusterer = hdbscan.HDBSCAN(min_cluster_size=20,metric='haversine').fit(points)
 color_palette = sns.color_palette('deep', 8)
 cluster_colors = [color_palette[x] if x >= 0
                   else (0.5, 0.5, 0.5)
@@ -54,4 +54,4 @@ print(len(clusterer.labels_))
 
 df_visual_data["cluster_group"] = clusterer.labels_
 
-df_visual_data.to_csv('clustered_1977.csv')
+df_visual_data.to_csv('clustered_2022_61.csv')
