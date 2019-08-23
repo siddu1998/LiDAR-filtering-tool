@@ -6,7 +6,7 @@ import pandas as pd
 
 
 
-df_visual_data = pd.read_csv('clustered_2022_41.csv')
+df_visual_data = pd.read_csv('clustered_1953_61_2015.csv')
 df_visual_data = df_visual_data.groupby('sign_id')
 
 sign_to_plot   = int(input("Please enter the sign you want to plot"))
@@ -47,13 +47,13 @@ y_sign=df_visual_data['long_sign']
 z_sign=df_visual_data['alt_sign']
 
 
-x_car=df_visual_data['car_lat']
-y_car=df_visual_data['car_long']
-z_car=df_visual_data['car_alt']
+# x_car=df_visual_data['car_lat']
+# y_car=df_visual_data['car_long']
+# z_car=df_visual_data['car_alt']
 
 
-ax.scatter(x_sign, y_sign, z_sign, s=100, c='g', marker='^')
-ax.scatter(x_car,y_car,z_car,s=100,c='y',marker='*')
+# ax.scatter(x_sign, y_sign, z_sign, s=100, c='g', marker='^')
+# ax.scatter(x_car,y_car,z_car,s=100,c='y',marker='*')
 
 
 

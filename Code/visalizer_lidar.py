@@ -6,7 +6,7 @@ import pandas as pd
 
 
 
-df_visual_data = pd.read_csv('visualize_radius_group_indices_frame.csv')
+df_visual_data = pd.read_csv('visualize_I258_2015_inaccuracy.csv')
 
 
 
@@ -29,12 +29,10 @@ z=[]
 for row in df_visual_data.iterrows():
 	index=row[0]
 	value=row[1]
-	if int(value['alt_diff'])>-5:
-		print(value)
 
-		x.append(value['lidar_lat'])
-		y.append(value['lidar_long'])
-		z.append(value['lidar_alt'])
+	x.append(value['lidar_lat'])
+	y.append(value['lidar_long'])
+	z.append(value['lidar_alt'])
 
 print(len(x))
 
@@ -60,5 +58,6 @@ ax.scatter(x_car,y_car,z_car,c='y',marker='*')
 ax.set_xlabel('X Label')
 ax.set_ylabel('Y Label')
 ax.set_zlabel('Z Label')
+ax.set_title('2018')
 
 plt.show()

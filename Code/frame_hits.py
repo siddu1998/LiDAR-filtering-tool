@@ -61,18 +61,8 @@ def DataFrameLLA2Cartesian(df):
 
 
 
-def apply_topology(self,bucket_of_points):    
-    #we want to apply topology on it 
-    # Sign topology 1 : get all those points whose retro is greater then 0.45 a.k.a get all those rows whose retro value is greater then 0.45
-    # Sign topology 2 : get all those points whose elevation is greater then a fixed metric 
-    return bucket_of_points.loc[(bucket_of_points['Retro'] >= 0.45) & (bucket_of_points['z_cart'] <= MAX_HEIGHT) & (bucket_of_points['z_cart'] <= MIN_HEIGHT)]
-
-
-
 
 def make_buckets(lidar_path,inventory_path):
-    base_folder='/'
-    save_folder = os.path.join(base_folder,'retro_hist')
 
     print("[INFO] Reading LiDAR data")
     df_retro = pd.read_csv(lidar_path)

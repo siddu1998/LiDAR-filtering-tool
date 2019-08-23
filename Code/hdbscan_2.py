@@ -8,7 +8,7 @@ import hdbscan
 
 import matplotlib.pyplot as plt
 import seaborn as sns
-df_visual_data = pd.read_csv('visualize_radius_group_indices_frame.csv')
+df_visual_data = pd.read_csv('visualize_I258_2015_inaccuracy.csv')
 
 
 
@@ -54,4 +54,4 @@ print(len(clusterer.labels_))
 
 df_visual_data["cluster_group"] = clusterer.labels_
 
-df_visual_data.to_csv('clustered_2022_61.csv')
+df_visual_data.to_csv('clustered_1953_61_2015.csv')
