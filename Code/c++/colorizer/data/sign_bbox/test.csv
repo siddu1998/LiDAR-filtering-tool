@@ -1,3 +1,0 @@
-Frame_name,bounding_box_x1,bounding_box_y1,bounding_box_x2,bounding_box_y2,box_id,lat,lon,distance_between_frames,frame_width,frame_height
-1.png,537,56,576,98,5,33.7770168263378,-84.3903128937968,800,800,
-2.png,618,64,668,118,5,33.7767694292668,-84.390329685256,800,800,
