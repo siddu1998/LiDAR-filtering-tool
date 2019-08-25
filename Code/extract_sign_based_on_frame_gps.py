@@ -63,10 +63,10 @@ def DataFrameLLA2Cartesian(df):
 
 """
 Summary : Pull out the point cloud coresponding to the sign in a particular frame
-Input   : Takes the inventory,coords.csv and the global lidar point cloud data.
+Input   : Takes the inventory,coords.csv and the global lidar point cloud data
 Output : returns output.csv associting the sign_id with its corresponding lidar points
 """
-def make_buckets(lidar_path,inventory_path):
+def make_buckets(lidar_path,inventory_path,coords_path):
 
     print("[INFO] Reading LiDAR data")
     df_retro = pd.read_csv(lidar_path)
@@ -93,7 +93,7 @@ def make_buckets(lidar_path,inventory_path):
 
 
     print("[INFO] Loading the camera cordinates")
-    df_camera_coords = pd.read_csv('../Data/coords.csv')
+    df_camera_coords = pd.read_csv(coords_path)
 
 
 
@@ -183,5 +183,5 @@ def make_buckets(lidar_path,inventory_path):
     print("[INFO] Finished extracting points")
 
 
-            
-make_buckets('/home/pramodith/Desktop/lidar_sign_extractor_v1/Data/V_20180816_I285_EB_run1(0).csv','/home/pramodith/Desktop/lidar_sign_extractor_v1/Data/SignInventory_i285_CW_output_V1.csv') 
+#insert             
+make_buckets('/home/pramodith/Desktop/lidar_sign_extractor_v1/Data/V_20180816_I285_EB_run1(0).csv','/home/pramodith/Desktop/lidar_sign_extractor_v1/Data/SignInventory_i285_CW_output_V1.csv','../Data/coords.csv') 
