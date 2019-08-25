@@ -1,9 +1,0 @@
-#include <liblas/liblas.hpp>
-#include <fstream>
-#include <iostream>
-#include <iomanip>
-#include <string>
-#include <stdio.h>
-#include <unistd.h>
-#include <dirent.h>
-#include <sys/start.h>
