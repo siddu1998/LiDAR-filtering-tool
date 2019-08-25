@@ -73,7 +73,7 @@ def make_buckets(lidar_path,inventory_path):
     print("[INFO] Reading LiDAR data")
     df_retro = pd.read_csv(lidar_path)
     print("[INFO] getting points with retro greater then 0.45")
-    df_retro = df_retro.loc[(df_retro['Retro']>=0.3)]
+    df_retro = df_retro.loc[(df_retro['Retro']>=0.61)]
 
     print("[INFO] Converting filtered points coordinates' from lla to NED..")
     df_retro = DataFrameLLA2Cartesian(df_retro)
@@ -117,19 +117,41 @@ def make_buckets(lidar_path,inventory_path):
             #print('[INFO] reshaping the converted cordinates for the query')
 
             query_point = np.array([x_sign,y_sign,z_sign]).reshape(1,-1)
-            query_return = kdtree.query(query_point)
-            temp_list[0]=value['sign_id']
-            temp_list[1]=value['lat']
-            temp_list[2]=value['long']
-            temp_list[3]=int(query_return[1])
-            temp_list[4]=float(query_return[0])
-            temp_list[5]=df_retro.iloc[int(query_return[1])]['Id'] 
-            temp_list[6]=df_retro.iloc[int(query_return[1])]['X']
-            temp_list[7]=df_retro.iloc[int(query_return[1])]['Y']
-            temp_list[8]=df_retro.iloc[int(query_return[1])]['Retro']
+            query_return = kdtree.query_ball_point(query_point,r=20)
+            if len(query_return[0])>0:
+            	for i in query_return[0]:
+                    temp_list=[None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None]
+                    
+                    temp_list[0]=value['sign_id']
+                    temp_list[1]=value['lat']
+                    temp_list[2]=value['long']
+                    temp_list[3]=value['alt']
+                
+                    temp_list[4]=i
+                    
+                    temp_list[5]=df_retro.iloc[i]['Y']
+                    temp_list[6]=df_retro.iloc[i]['X']
+                    temp_list[7]=df_retro.iloc[i]['Z']
 
-            check_list.append(temp_list)
+                    temp_list[8]=df_retro.iloc[i]['Retro']
+                    temp_list[9]=value['mutcd_code']
+                    temp_list[10]=len(query_return[0])
 
+   
+
+                    temp_list[11]=value['overhead_type']
+                    #car-sign if below car +ve if above car -ve
+                    #temp_list[12]=int(temp_df['alt'])-int(temp_list[7])
+
+                    temp_list[12]=df_retro.iloc[i]['x_cart']
+                    temp_list[13]=df_retro.iloc[i]['y_cart']
+                    temp_list[14]=df_retro.iloc[i]['z_cart']
+
+                    temp_list[15]=value['frame_id_2018']
+                    temp_list[16]=value['physical_condition']
+
+
+                    check_list.append(temp_list)
 
 
 
@@ -137,9 +159,10 @@ def make_buckets(lidar_path,inventory_path):
 
     print("[INFO] Saving to file")
     df_lidar = pd.DataFrame(check_list)
-    df_lidar.to_csv('visualize.csv',index=False,header=False)
+    df_lidar = pd.DataFrame(check_list,columns=['sign_id','lat_sign','long_sign','alt_sign','index','lidar_lat','lidar_long','lidar_alt','retro','mutcd_code','count','overhead_type','x_cart','y_cart','z_cart','frame','physical_condition'])
+    df_lidar.to_csv('visualize_I258_2015_inaccuracy.csv',index=False,header=True)
 
 
 
             
-make_buckets('/home/pramodith/Desktop/lidar_sign_extractor_v1/Data/V_20180816_I285_EB_run1(0).csv','/home/pramodith/Desktop/lidar_sign_extractor_v1/Data/SignInventory_i285_CW_output_V1.csv') 
+make_buckets('/home/pramodith/Desktop/lidar_sign_extractor_v1/Data/V_20150716_I285_Clock_SEG1(0).csv','/home/pramodith/Desktop/lidar_sign_extractor_v1/Data/SignInventory_i285_CW_output_V1.csv') 

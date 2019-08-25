@@ -61,18 +61,8 @@ def DataFrameLLA2Cartesian(df):
 
 
 
-def apply_topology(self,bucket_of_points):    
-    #we want to apply topology on it 
-    # Sign topology 1 : get all those points whose retro is greater then 0.45 a.k.a get all those rows whose retro value is greater then 0.45
-    # Sign topology 2 : get all those points whose elevation is greater then a fixed metric 
-    return bucket_of_points.loc[(bucket_of_points['Retro'] >= 0.45) & (bucket_of_points['z_cart'] <= MAX_HEIGHT) & (bucket_of_points['z_cart'] <= MIN_HEIGHT)]
-
-
-
 
 def make_buckets(lidar_path,inventory_path):
-    base_folder='/'
-    save_folder = os.path.join(base_folder,'retro_hist')
 
     print("[INFO] Reading LiDAR data")
     df_retro = pd.read_csv(lidar_path)
@@ -141,7 +131,7 @@ def make_buckets(lidar_path,inventory_path):
             if len(query_return[0])>0:
                 for i in query_return[0]:
                     #print(len(query_return[0]))
-                    temp_list=[None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None]
+                    temp_list=[None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None]
                     
                     temp_list[0]=value['sign_id']
                     temp_list[1]=value['lat']
@@ -171,13 +161,14 @@ def make_buckets(lidar_path,inventory_path):
                     temp_list[18]=df_retro.iloc[i]['z_cart']
 
                     temp_list[19]=value['frame_id_2018']
+                    temp_list[20]=value['physical_condition']
 
 
                     check_list.append(temp_list)
 
 
     print("[INFO] Saving to file")
-    df_lidar = pd.DataFrame(check_list,columns=['sign_id','lat_sign','long_sign','alt_sign','index','lidar_lat','lidar_long','lidar_alt','retro','mutcd_code','count','car_lat','car_long','car_alt','overhead','alt_diff','x_cart','y_cart','z_cart','frame'])
+    df_lidar = pd.DataFrame(check_list,columns=['sign_id','lat_sign','long_sign','alt_sign','index','lidar_lat','lidar_long','lidar_alt','retro','mutcd_code','count','car_lat','car_long','car_alt','overhead','alt_diff','x_cart','y_cart','z_cart','frame','physical_condition'])
     df_lidar.to_csv('visualize_radius_group_indices_frame.csv',index=False,header=True)
     print("[INFO] Finished extracting points")
 
