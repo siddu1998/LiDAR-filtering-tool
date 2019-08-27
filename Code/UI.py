@@ -32,7 +32,8 @@ import math
 import numpy as np
 import os
 import matplotlib.pyplot as plt
-
+from sklearn.cluster import KMeans, DBSCAN
+import hdbscan
 
 
 #font size
@@ -100,6 +101,10 @@ class StartPage(tk.Frame):
         button.pack(side='left',padx='5',pady='10')
 
 
+        sign_id_entry=tk.Entry(self)
+        sign_id_entry.pack(side='left',padx='5',pady='10')
+        button_get_sign_lidar=ttk.Button(self,text='Get Sign id point cloud',command=lambda:self.get_details(sign_id_entry.get()))
+        button_get_sign_lidar.pack(side='left',padx='5',pady='10')
 
     def DataFrameLLA2Cartesian(self,df):
         lon = df["X"].values
@@ -119,6 +124,7 @@ class StartPage(tk.Frame):
         print("[INFO] Reading LiDAR data")
         chunksize=10**6
         for chunk in pd.read_csv(self.lidar_file,chunksize=chunksize):
+            print("[INFO] Reading Chunks")
             df_retro = df_retro.append(chunk,ignore_index=True)
 
         print("[INFO] Getting points with retro greater then 0.45")
@@ -190,7 +196,31 @@ class StartPage(tk.Frame):
         df_lidar = pd.DataFrame(self.master_list,columns=['sign_id','lat_sign','long_sign','alt_sign','index','lidar_lat','lidar_long','lidar_alt','retro','mutcd_code','count','car_lat','car_long','car_alt','overhead','alt_diff','x_cart','y_cart','z_cart','frame','physical_condition'])
         # output_file=self.lidar_file+'signs.csv'
         df_lidar.to_csv('output_file.csv',index=False,header=True)
-        print("[INFO] Finished extracting points")
+        print("[INFO] Finished extracting points and saved to output csv file")
+
+    def get_details(self,sign_id):
+
+        print('[INFO] Extracting and analysing sign id {}'.format(sign_id))
+        print('[INFO] Reading the lidar-sign relation file')
+        df_sign_info = pd.read_csv('output_file.csv')
+        print('[INFO] Grouping by your selected Sign is')
+        df_sign_info = df_sign_info.groupby('sign_id')
+        print('[INFO] Getting your group')
+        df_sign_info = df_sign_info.get_group(int(sign_id))
+        print('[INFO] Extracting Lidar lat and Lidar Long')
+        points = df_sign_info[["lidar_lat", "lidar_long"]].values
+        print('[INFO] Converting to radians')
+        rads = np.radians(points)
+        print('[INFO] Clustering the points using HDBSCAN')
+        clusterer = hdbscan.HDBSCAN(min_cluster_size=20,metric='haversine').fit(points)
+        print('[INFO] Creating new coloumn for cluster label')
+        df_sign_info["cluster_group"] = clusterer.labels_
+        print('[INFO] creating output for sign {}'.format(sign_id))
+        ouput_path='../Data/output_{}.csv'.format(sign_id)
+        df_sign_info.to_csv(ouput_path)
+        print('[INFO] Analysis results finished!')
+
+
 
 
 
