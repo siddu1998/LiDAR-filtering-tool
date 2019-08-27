@@ -25,9 +25,24 @@ from math import atan2, cos, sin
 from tkinter import filedialog as fd
 
 
+from scipy.spatial.ckdtree import cKDTree
+import pandas as pd 
+import navpy
+import math
+import numpy as np
+import os
+import matplotlib.pyplot as plt
+
+
 
 #font size
 LARGE_FONT=("Verdana",9)
+MIN_ELEVATION =2
+MAX_ELEVATION =10
+
+LAT_REF = 33.79588248
+LON_REF = -84.24924553
+ALT_REF = 200
 
 
 
@@ -42,7 +57,7 @@ class SignAnalyzer(tk.Tk):
         container.grid_columnconfigure(0,weight=1)
 
         self.frames={}
-        for F in (StartPage):
+        for F in (StartPage,second_page):
             frame = F(container,self)
             self.frames[F]=frame
             frame.grid(row=0,column=0,sticky="nsew")
@@ -52,6 +67,11 @@ class SignAnalyzer(tk.Tk):
     def show_frame(self,cont):
         frame=self.frames[cont]
         frame.tkraise()
+
+
+class second_page(tk.Frame):
+    def __init__(self,parent,controller):
+        tk.Frame.__init__(self,parent)
 
 
 #Front page
@@ -74,7 +94,14 @@ class StartPage(tk.Frame):
         self.master_list=[]
 
 
-    def DataFrameLLA2Cartesian(df):
+        retro_treshold=tk.Entry(self)
+        retro_treshold.pack(side='left',padx='5',pady='10')
+        button=ttk.Button(self,text="Get point clouds of signs",command=lambda:self.make_buckets(retro_treshold.get()))
+        button.pack(side='left',padx='5',pady='10')
+
+
+
+    def DataFrameLLA2Cartesian(self,df):
         lon = df["X"].values
         lat = df["Y"].values
         alt = df["Z"].values
@@ -86,17 +113,19 @@ class StartPage(tk.Frame):
         df['z_cart'] = cartesian[:, 2]
         return df
 
-    def make_buckets(self):
+    def make_buckets(self,retro_treshold):
         self.master_list=[]
-
+        df_retro=pd.DataFrame()
         print("[INFO] Reading LiDAR data")
-        df_retro = pd.read_csv(self.lidar_file)
+        chunksize=10**6
+        for chunk in pd.read_csv(self.lidar_file,chunksize=chunksize):
+            df_retro = df_retro.append(chunk,ignore_index=True)
 
         print("[INFO] Getting points with retro greater then 0.45")
-        df_retro = df_retro.loc[(df_retro['Retro']>=0.61)]
+        df_retro = df_retro.loc[(df_retro['Retro']>=float(retro_treshold))]
 
         print("[INFO] Converting filtered points coordinates' from lla to NED..")
-        df_retro = DataFrameLLA2Cartesian(df_retro)
+        df_retro = self.DataFrameLLA2Cartesian(df_retro)
         
         print("[INFO] Adding extra coloumn in the starting for sign ids")
         df_retro['sign_id'] = [-1 for i in range(len(df_retro))]
@@ -156,11 +185,12 @@ class StartPage(tk.Frame):
                         temp_list[19]=value['frame_id_2018']
                         temp_list[20]=value['physical_condition']
                         self.master_list.append(temp_list)
-                        
-    print("[INFO] Saving to file")
-    df_lidar = pd.DataFrame(check_list,columns=['sign_id','lat_sign','long_sign','alt_sign','index','lidar_lat','lidar_long','lidar_alt','retro','mutcd_code','count','car_lat','car_long','car_alt','overhead','alt_diff','x_cart','y_cart','z_cart','frame','physical_condition'])
-    df_lidar.to_csv('visualize_radius_group_indices_frame.csv',index=False,header=True)
-    print("[INFO] Finished extracting points")
+
+        print("[INFO] Saving to file")
+        df_lidar = pd.DataFrame(self.master_list,columns=['sign_id','lat_sign','long_sign','alt_sign','index','lidar_lat','lidar_long','lidar_alt','retro','mutcd_code','count','car_lat','car_long','car_alt','overhead','alt_diff','x_cart','y_cart','z_cart','frame','physical_condition'])
+        # output_file=self.lidar_file+'signs.csv'
+        df_lidar.to_csv('output_file.csv',index=False,header=True)
+        print("[INFO] Finished extracting points")
 
 
 
