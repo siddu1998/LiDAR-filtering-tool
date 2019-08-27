@@ -195,14 +195,14 @@ class StartPage(tk.Frame):
         print("[INFO] Saving to file")
         df_lidar = pd.DataFrame(self.master_list,columns=['sign_id','lat_sign','long_sign','alt_sign','index','lidar_lat','lidar_long','lidar_alt','retro','mutcd_code','count','car_lat','car_long','car_alt','overhead','alt_diff','x_cart','y_cart','z_cart','frame','physical_condition'])
         # output_file=self.lidar_file+'signs.csv'
-        df_lidar.to_csv('output_file.csv',index=False,header=True)
+        df_lidar.to_csv('../Data/lidar_sheets/output_file.csv',index=False,header=True)
         print("[INFO] Finished extracting points and saved to output csv file")
 
     def get_details(self,sign_id):
 
         print('[INFO] Extracting and analysing sign id {}'.format(sign_id))
         print('[INFO] Reading the lidar-sign relation file')
-        df_sign_info = pd.read_csv('output_file.csv')
+        df_sign_info = pd.read_csv('../Data/lidar_sheets/output_file.csv')
         print('[INFO] Grouping by your selected Sign is')
         df_sign_info = df_sign_info.groupby('sign_id')
         print('[INFO] Getting your group')
@@ -216,7 +216,7 @@ class StartPage(tk.Frame):
         print('[INFO] Creating new coloumn for cluster label')
         df_sign_info["cluster_group"] = clusterer.labels_
         print('[INFO] creating output for sign {}'.format(sign_id))
-        ouput_path='../Data/output_{}.csv'.format(sign_id)
+        ouput_path='../Data/sign_sheets/output_{}.csv'.format(sign_id)
         df_sign_info.to_csv(ouput_path)
         print('[INFO] Analysis results finished!')
 
